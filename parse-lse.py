@@ -11,6 +11,15 @@ from urllib import request
 Prices = Dict[str, str]
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description='Parse historic commodity prices from the London Stock Exchange.')
+    parser.add_argument('key', help='The commodity key, e.g. "UKX.FTD" for FTSE100')
+    parser.add_argument('commodity', help='The commodity name, e.g. FTSE100')
+    parser.add_argument('-c', '--currency', default='GBP', help='The currency of the price, defaults to "GBP"')
+    parser.add_argument('file', help='The beancount price file, e.g. FTSE100.beancount')
+    return parser.parse_args()
+
+
 def parse_response(existing_prices: dict, response: dict) -> Prices:
     prices = {}
 
@@ -22,15 +31,6 @@ def parse_response(existing_prices: dict, response: dict) -> Prices:
             prices[date] = price
 
     return prices
-
-
-def parse_args():
-    parser = argparse.ArgumentParser(description='Parse historic commodity prices from the London Stock Exchange.')
-    parser.add_argument('key', help='The commodity key, e.g. "UKX.FTD" for FTSE100')
-    parser.add_argument('commodity', help='The commodity name, e.g. FTSE100')
-    parser.add_argument('-c', '--currency', default='GBP', help='The currency of the price, defaults to "GBP"')
-    parser.add_argument('file', help='The beancount price file, e.g. FTSE100.beancount')
-    return parser.parse_args()
 
 
 def read_prices(file: str, commodity: str, currency: str) -> Prices:

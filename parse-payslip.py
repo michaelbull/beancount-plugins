@@ -9,6 +9,25 @@ from typing import List, Pattern
 Transaction = List[str]
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description='Parse a payslip in PDF format and append it to a beancount file as a new transaction.'
+    )
+    parser.add_argument('pdf_file',
+                        help='The input PDF file to parse, e.g. payslip.pdf')
+    parser.add_argument('beancount_file',
+                        help='The beancount file to write to, e.g. ledger.beancount')
+    parser.add_argument('-a', '--asset', default='Bank',
+                        help='Specifies the asset to which the net pay should be allocated. Defaults to "Bank".')
+    parser.add_argument('-c', '--currency', default='GBP',
+                        help='Specifies the currency to use. Defaults to "GBP".')
+    parser.add_argument('-e', '--employer', default='Work',
+                        help='Specifies name of the employer. Defaults to "Work".')
+    parser.add_argument('-s', '--student_loan', action='store_true',
+                        help='Include Student Loan repayment information.')
+    return parser.parse_args()
+
+
 def pattern_for(field_name: str) -> Pattern[str]:
     return re.compile(field_name + '[ ]+(-?\d*\.?\d+)')
 
@@ -27,25 +46,6 @@ def append_transaction(file: str, lines: List[str]) -> None:
         out.write('\n'.join(lines))
         out.write('\n')
     print('Saved transaction to ' + file)
-
-
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description='Parse a payslip in PDF format and append it to a beancount file as a new transaction.'
-    )
-    parser.add_argument('pdf_file',
-                        help='The input PDF file to parse, e.g. payslip.pdf')
-    parser.add_argument('beancount_file',
-                        help='The beancount file to write to, e.g. ledger.beancount')
-    parser.add_argument('-a', '--asset', default='Bank',
-                        help='Specifies the asset to which the net pay should be allocated. Defaults to "Bank".')
-    parser.add_argument('-c', '--currency', default='GBP',
-                        help='Specifies the currency to use. Defaults to "GBP".')
-    parser.add_argument('-e', '--employer', default='Work',
-                        help='Specifies name of the employer. Defaults to "Work".')
-    parser.add_argument('-s', '--student_loan', action='store_true',
-                        help='Include Student Loan repayment information.')
-    return parser.parse_args()
 
 
 def pdftotext(file: str) -> str:
