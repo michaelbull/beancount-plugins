@@ -1,0 +1,22 @@
+# Hidden files
+.*
+
+# Temporary files
+~*
+
+# Git
+!.git*
+
+# EditorConfig
+!.editorconfig
+
+# Travis CI
+!.travis.yml
+
+# IntelliJ Idea
+*.iml
+*.ipr
+*.iws
+
+# virtualenv
+/venv
