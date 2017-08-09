@@ -13,6 +13,9 @@
 # Travis CI
 !.travis.yml
 
+# Python
+/__pycache__
+
 # IntelliJ Idea
 *.iml
 *.ipr

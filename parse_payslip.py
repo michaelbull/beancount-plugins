@@ -12,12 +12,12 @@ Transaction = List[str]
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description='Parse a payslip in PDF format and append it to a beancount file as a new transaction.'
+        description='Parse a payslip in PDF format and append it to a beancount journal as a new transaction.'
     )
-    parser.add_argument('pdf_file',
-                        help='The input PDF file to parse, e.g. payslip.pdf')
-    parser.add_argument('beancount_file',
-                        help='The beancount file to write to, e.g. ledger.beancount')
+    parser.add_argument('file',
+                        help='The PDF file to parse, e.g. payslip.pdf')
+    parser.add_argument('journal',
+                        help='The beancount journal to write to, e.g. journal.beancount')
     parser.add_argument('-a', '--asset', default='Bank',
                         help='Specifies the asset to which the net pay should be allocated. Defaults to Bank.')
     parser.add_argument('-c', '--currency', default='GBP',
@@ -82,13 +82,13 @@ def build_transaction(content: str, currency: str, employer: str, asset: str, st
 
 def main() -> None:
     args = parse_args()
-    content = pdftotext(args.pdf_file)
+    content = pdftotext(args.file)
 
     if content == '':
         sys.exit('Failed to read text content from PDF file.')
     else:
         transaction = build_transaction(content, args.currency, args.employer, args.asset, args.student_loan)
-        append_transaction(args.beancount_file, transaction)
+        append_transaction(args.journal, transaction)
 
 
 if __name__ == '__main__':

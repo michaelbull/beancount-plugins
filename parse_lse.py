@@ -13,11 +13,13 @@ Prices = Dict[str, str]
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Parse historic commodity prices from the London Stock Exchange.')
+    parser = argparse.ArgumentParser(
+        description='Parse historic commodity price information from the London Stock Exchange.'
+    )
     parser.add_argument('key', help='The commodity key, e.g. UKX.FTD for FTSE100.')
     parser.add_argument('commodity', help='The commodity name, e.g. FTSE100')
     parser.add_argument('-c', '--currency', default='GBP', help='The currency of the price. Defaults to GBP.')
-    parser.add_argument('file', help='The beancount price file, e.g. FTSE100.beancount')
+    parser.add_argument('journal', help='The beancount journal to write to, e.g. FTSE100.beancount')
     return parser.parse_args()
 
 
@@ -98,7 +100,7 @@ def write_prices(file: str, prices: Prices, commodity: str, currency: str) -> No
 
 def main() -> None:
     args = parse_args()
-    recorded_prices = read_prices(args.file, args.commodity, args.currency)
+    recorded_prices = read_prices(args.journal, args.commodity, args.currency)
     response = fetch_prices(args.key)
     parsed_prices = parse_response(response)
     new_prices = diff_prices(recorded_prices, parsed_prices)
@@ -106,7 +108,7 @@ def main() -> None:
     if len(new_prices) == 0:
         print('Stock Exchange returned no unrecorded prices. Try again later.')
     else:
-        write_prices(args.file, new_prices, args.commodity, args.currency)
+        write_prices(args.journal, new_prices, args.commodity, args.currency)
 
 
 if __name__ == '__main__':
