@@ -1,29 +1,29 @@
 import re
 
-from parse_payslip import build_transaction, find, pattern_for
+from parse_payslip import build_transaction, field_pattern, find
 
 
 def test_pattern_for_field() -> None:
-    pattern = pattern_for('example')
+    pattern = field_pattern('example')
     match = re.search(pattern, 'example       5145.05')
-    assert match.group(1) == '5145.05'
+    assert match.group('field') == '5145.05'
 
 
 def test_pattern_for_mismatch():
-    pattern = pattern_for('my pattern')
+    pattern = field_pattern('my pattern')
     match = re.search(pattern, 'this is wrong')
     assert match is None
 
 
 def test_find_group() -> None:
-    pattern = re.compile('(\d+)')
-    match = find(pattern, '505')
+    pattern = re.compile('(?P<mynumber>\d+)')
+    match = find(pattern, 'mynumber', '505')
     assert match == '505'
 
 
 def test_find_mismatch() -> None:
-    pattern = re.compile('(\d+)')
-    match = find(pattern, 'not a number')
+    pattern = re.compile('(?P<maybeanumber>\d+)')
+    match = find(pattern, 'maybeanumber', 'not a number')
     assert match == ''
 
 

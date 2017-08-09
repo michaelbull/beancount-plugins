@@ -33,7 +33,7 @@ def parse_response(response: dict) -> Prices:
 
 def read_prices(file: str, commodity: str, currency: str) -> Prices:
     path = pathlib.Path(file)
-    price_pattern = re.compile('(\d{4}-\d{2}-\d{2}) price ' + commodity + ' (\d*\.?\d+) ' + currency)
+    price_pattern = re.compile('(?P<date>\d{4}-\d{2}-\d{2}) price ' + commodity + ' (?P<price>\d*\.?\d+) ' + currency)
 
     recorded_prices = {}
 
@@ -42,7 +42,7 @@ def read_prices(file: str, commodity: str, currency: str) -> Prices:
             for line in lines:
                 match = re.search(price_pattern, line)
                 if match:
-                    recorded_prices[match.group(1)] = match.group(2)
+                    recorded_prices[match.group('date')] = match.group('price')
             print('Read {} recorded price(s).'.format(len(recorded_prices)))
 
     return recorded_prices

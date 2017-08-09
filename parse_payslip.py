@@ -28,14 +28,14 @@ def parse_args():
     return parser.parse_args()
 
 
-def pattern_for(field_name: str) -> Pattern[str]:
-    return re.compile(field_name + '[ ]+(-?\d*\.?\d+)')
+def field_pattern(field_name: str) -> Pattern[str]:
+    return re.compile(field_name + '[ ]+(?P<field>-?\d*\.?\d+)')
 
 
-def find(pattern: Pattern[str], text: str) -> str:
+def find(pattern: Pattern[str], group: str, text: str) -> str:
     match = re.search(pattern, text)
     if match:
-        return match.group(1)
+        return match.group(group)
     else:
         return ''
 
@@ -56,9 +56,9 @@ def pdftotext(file: str) -> str:
 def build_transaction(content: str, currency: str, employer: str, asset: str, student_loan: bool) -> Transaction:
     transaction: Transaction = []
 
-    date = find(re.compile('(\d+/\d+/\d+)'), content)
-    income_tax = find(pattern_for('PAYE Tax'), content)
-    national_insurance = find(pattern_for('National Insurance'), content)
+    date = find(re.compile('(?P<date>\d+/\d+/\d+)'), 'date', content)
+    income_tax = find(field_pattern('PAYE Tax'), 'field', content)
+    national_insurance = find(field_pattern('National Insurance'), 'field', content)
 
     transaction += [
         date + ' * "' + employer + '"',
@@ -67,10 +67,10 @@ def build_transaction(content: str, currency: str, employer: str, asset: str, st
     ]
 
     if student_loan:
-        repayment = find(pattern_for('Student Loan'), content)
+        repayment = find(field_pattern('Student Loan'), 'field', content)
         transaction += ['  Liabilities:StudentFinance ' + repayment + ' ' + currency]
 
-    net_pay = find(pattern_for('Net Pay'), content)
+    net_pay = find(field_pattern('Net Pay'), 'field', content)
     transaction += [
         '  Assets:' + asset + ' ' + net_pay + ' ' + currency,
         '  Income:' + employer + ':Salary'
