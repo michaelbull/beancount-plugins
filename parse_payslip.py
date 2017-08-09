@@ -42,9 +42,7 @@ def find(pattern: Pattern[str], text: str) -> str:
 
 def append_transaction(file: str, lines: List[str]) -> None:
     with open(file, 'a') as out:
-        out.write('\n')
-        out.write('\n'.join(lines))
-        out.write('\n')
+        out.write('\n'.join(['', *lines, '']))
     print('Saved transaction to ' + file)
 
 
