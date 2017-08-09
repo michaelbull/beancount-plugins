@@ -4,9 +4,10 @@ import argparse
 import datetime
 import json
 import pathlib
-import re
 from typing import Dict
 from urllib import request
+
+import re
 
 Prices = Dict[str, str]
 

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 import argparse
-import re
 import subprocess
 import sys
 from typing import List, Pattern
+
+import re
 
 Transaction = List[str]
 
@@ -59,6 +60,7 @@ def build_transaction(content: str, currency: str, employer: str, asset: str, st
     date = find(re.compile('(?P<date>\d+/\d+/\d+)'), 'date', content)
     income_tax = find(field_pattern('PAYE Tax'), 'field', content)
     national_insurance = find(field_pattern('National Insurance'), 'field', content)
+    net_pay = find(field_pattern('Net Pay'), 'field', content)
 
     transaction += [
         date + ' * "' + employer + '"',
@@ -70,7 +72,6 @@ def build_transaction(content: str, currency: str, employer: str, asset: str, st
         repayment = find(field_pattern('Student Loan'), 'field', content)
         transaction += ['  Liabilities:StudentFinance ' + repayment + ' ' + currency]
 
-    net_pay = find(field_pattern('Net Pay'), 'field', content)
     transaction += [
         '  Assets:' + asset + ' ' + net_pay + ' ' + currency,
         '  Income:' + employer + ':Salary'
