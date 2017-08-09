@@ -90,5 +90,5 @@ def main() -> None:
         append_transaction(args.beancount_file, transaction)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

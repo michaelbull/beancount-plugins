@@ -108,5 +108,5 @@ def main() -> None:
         write_prices(args.file, new_prices, args.commodity, args.currency)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
