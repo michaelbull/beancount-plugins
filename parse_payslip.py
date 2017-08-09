@@ -18,11 +18,11 @@ def parse_args():
     parser.add_argument('beancount_file',
                         help='The beancount file to write to, e.g. ledger.beancount')
     parser.add_argument('-a', '--asset', default='Bank',
-                        help='Specifies the asset to which the net pay should be allocated. Defaults to "Bank".')
+                        help='Specifies the asset to which the net pay should be allocated. Defaults to Bank.')
     parser.add_argument('-c', '--currency', default='GBP',
-                        help='Specifies the currency to use. Defaults to "GBP".')
+                        help='Specifies the currency to use. Defaults to GBP.')
     parser.add_argument('-e', '--employer', default='Work',
-                        help='Specifies name of the employer. Defaults to "Work".')
+                        help='Specifies name of the employer. Defaults to Work.')
     parser.add_argument('-s', '--student_loan', action='store_true',
                         help='Include Student Loan repayment information.')
     return parser.parse_args()
@@ -81,7 +81,7 @@ def build_transaction(content: str, currency: str, employer: str, asset: str, st
     return transaction
 
 
-def run() -> None:
+def main() -> None:
     args = parse_args()
     content = pdftotext(args.pdf_file)
 
@@ -92,4 +92,5 @@ def run() -> None:
         append_transaction(args.beancount_file, transaction)
 
 
-run()
+if __name__ == "__main__":
+    main()

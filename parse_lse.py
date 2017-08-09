@@ -13,9 +13,9 @@ Prices = Dict[str, str]
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Parse historic commodity prices from the London Stock Exchange.')
-    parser.add_argument('key', help='The commodity key, e.g. "UKX.FTD" for FTSE100')
+    parser.add_argument('key', help='The commodity key, e.g. UKX.FTD for FTSE100.')
     parser.add_argument('commodity', help='The commodity name, e.g. FTSE100')
-    parser.add_argument('-c', '--currency', default='GBP', help='The currency of the price, defaults to "GBP"')
+    parser.add_argument('-c', '--currency', default='GBP', help='The currency of the price. Defaults to GBP.')
     parser.add_argument('file', help='The beancount price file, e.g. FTSE100.beancount')
     return parser.parse_args()
 
@@ -95,7 +95,7 @@ def write_prices(file: str, prices: Prices, commodity: str, currency: str) -> No
     print('Wrote {} new price(s).'.format(len(prices)))
 
 
-def run() -> None:
+def main() -> None:
     args = parse_args()
     recorded_prices = read_prices(args.file, args.commodity, args.currency)
     response = fetch_prices(args.key)
@@ -108,4 +108,5 @@ def run() -> None:
         write_prices(args.file, new_prices, args.commodity, args.currency)
 
 
-run()
+if __name__ == "__main__":
+    main()

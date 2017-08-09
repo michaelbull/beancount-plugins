@@ -1,2 +1,4 @@
 mypy==0.521
+py==1.4.34
+pytest==3.2.0
 typed-ast==1.0.4
