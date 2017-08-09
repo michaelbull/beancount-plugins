@@ -32,8 +32,8 @@ def pattern_for(field_name: str) -> Pattern[str]:
     return re.compile(field_name + '[ ]+(-?\d*\.?\d+)')
 
 
-def find(pattern: Pattern[str], file: str) -> str:
-    match = re.search(pattern, file)
+def find(pattern: Pattern[str], text: str) -> str:
+    match = re.search(pattern, text)
     if match:
         return match.group(1)
     else:
