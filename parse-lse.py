@@ -20,15 +20,13 @@ def parse_args():
     return parser.parse_args()
 
 
-def parse_response(existing_prices: dict, response: dict) -> Prices:
+def parse_response(response: dict) -> Prices:
     prices = {}
 
     for entry in response['d']:
         date = datetime.datetime.fromtimestamp(entry[0] / 1000).strftime('%Y-%m-%d')
         price = '{0:.3f}'.format(entry[1] / 100)
-
-        if date not in existing_prices:
-            prices[date] = price
+        prices[date] = price
 
     return prices
 
@@ -79,7 +77,17 @@ def fetch_prices(key: str) -> dict:
     return json.loads(resp.read().decode())
 
 
-def write_prices(file: str, prices: dict, commodity: str, currency: str) -> None:
+def diff_prices(existing: Prices, new: Prices) -> Prices:
+    prices = {}
+
+    for date, price in new.items():
+        if date not in existing:
+            prices[date] = price
+
+    return prices
+
+
+def write_prices(file: str, prices: Prices, commodity: str, currency: str) -> None:
     with open(file, 'a') as out:
         for date, price in prices.items():
             out.write(date + ' price ' + commodity + ' ' + price + ' ' + currency)
@@ -91,12 +99,13 @@ def run() -> None:
     args = parse_args()
     recorded_prices = read_prices(args.file, args.commodity, args.currency)
     response = fetch_prices(args.key)
-    prices = parse_response(recorded_prices, response)
+    parsed_prices = parse_response(response)
+    new_prices = diff_prices(recorded_prices, parsed_prices)
 
-    if len(prices) == 0:
+    if len(new_prices) == 0:
         print('Stock Exchange returned no unrecorded prices. Try again later.')
     else:
-        write_prices(args.file, prices, args.commodity, args.currency)
+        write_prices(args.file, new_prices, args.commodity, args.currency)
 
 
 run()
