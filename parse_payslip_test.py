@@ -3,13 +3,13 @@ import re
 from parse_payslip import build_transaction, field_pattern, find
 
 
-def test_pattern_for_field() -> None:
+def test_field_pattern() -> None:
     pattern = field_pattern('example')
     match = re.search(pattern, 'example       5145.05')
     assert match.group('field') == '5145.05'
 
 
-def test_pattern_for_mismatch():
+def test_field_pattern_mismatch():
     pattern = field_pattern('my pattern')
     match = re.search(pattern, 'this is wrong')
     assert match is None
