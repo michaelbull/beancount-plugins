@@ -4,15 +4,11 @@
 
 A collection of my custom [beancount][beancount] importers, written in [Python 3.6+][python].
 
-## Importers
-
-### LondonStockExchangeImporter
+## LondonStockExchangeImporter
 
 Import historic commodity price information from the London Stock Exchange.
 
-#### Example
-
-##### `lse_config.py`
+`lse_config.py`:
 
 ```python
 from src.importers.lse import LondonStockExchangeImporter
@@ -22,8 +18,8 @@ CONFIG = [
 ]
 ```
 
-##### Output
-```bash
+**Output:**
+```
 $ cat prices/FTSE100.price
 UKX.FTD
 
@@ -45,13 +41,11 @@ $ bean-extract lse_config.py prices/
 
 ```
 
-### PayslipImporter
+## PayslipImporter
 
 Import a PDF payslip.
 
-#### Example
-
-##### `payslip_config.py`
+`payslip_config.py`:
 
 ```python
 from src.importers.payslip import PayslipImporter
@@ -61,7 +55,7 @@ CONFIG = [
 ]
 ```
 
-##### Output
+**Output:**
 
 ```
 $ tree payslips/
