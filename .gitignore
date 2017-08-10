@@ -14,7 +14,7 @@
 !.travis.yml
 
 # Python
-/__pycache__
+__pycache__/
 
 # IntelliJ Idea
 *.iml

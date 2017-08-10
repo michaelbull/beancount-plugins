@@ -1,49 +1,82 @@
-# beancount-parsers
+# beancount-importers
 
-[![Build Status](https://travis-ci.org/michaelbull/beancount-parsers.svg?branch=master)](https://travis-ci.org/michaelbull/beancount-parsers)
+[![Build Status](https://travis-ci.org/michaelbull/beancount-importers.svg?branch=master)](https://travis-ci.org/michaelbull/beancount-importers)
 
-A collection of [Python 3.6+][python] scripts to parse a variety of data sources
-into a [beancount][beancount] journal.
+A collection of my custom [beancount][beancount] importers, written in [Python 3.6+][python].
 
-## Parsers
+## Importers
 
-### `parse_lse.py`
+### LondonStockExchangeImporter
 
-Parse historic commodity price information from the London Stock Exchange.
-
-New price information is appended to the specified beancount journal.
+Import historic commodity price information from the London Stock Exchange.
 
 #### Example
 
-```
-$ ./parse_lse.py UKX.FTD FTSE100 FTSE100.beancount
-Wrote 1262 new price(s).
+##### `lse_config.py`
 
-$ head -5 FTSE100.beancount
-2012-08-09 price FTSE100 58.515 GBP
-2012-08-10 price FTSE100 58.471 GBP
-2012-08-13 price FTSE100 58.319 GBP
-2012-08-14 price FTSE100 58.648 GBP
-2012-08-15 price FTSE100 58.330 GBP
+```python
+from src.importers.lse import LondonStockExchangeImporter
+
+CONFIG = [
+    LondonStockExchangeImporter('GBP')
+]
 ```
 
-### `parse_payslip.py`
+##### Output
+```bash
+$ cat prices/FTSE100.price
+UKX.FTD
 
-Parse a payslip in PDF format and append it to a beancount journal as a new
-transaction.
+$ bean-extract lse_config.py prices/
+;; -*- mode: beancount -*-
+**** prices/FTSE100.price
+
+2012-08-13 price FTSE100                            58.319 GBP
+
+2012-08-14 price FTSE100                            58.648 GBP
+
+2012-08-15 price FTSE100                            58.330 GBP
+
+2012-08-16 price FTSE100                            58.345 GBP
+
+2012-08-17 price FTSE100                            58.524 GBP
+
+...
+
+```
+
+### PayslipImporter
+
+Import a PDF payslip.
 
 #### Example
 
-```
-$ ./parse_payslip.py payslip.pdf journal.beancount
-Saved transaction to journal.beancount
+##### `payslip_config.py`
 
-$ tail -5 journal.beancount
-31/07/2017 * "Work"
-  Expenses:Tax:Income 1234.56 GBP
-  Expenses:Tax:NationalInsurance 789.10 GBP
-  Assets:Bank 1122.33 GBP
-  Income:Work:Salary
+```python
+from src.importers.payslip import PayslipImporter
+
+CONFIG = [
+    PayslipImporter('Google', 'NatWest:Savings', 'GBP', student_loan=False)
+]
+```
+
+##### Output
+
+```
+$ tree payslips/
+payslips/
+└── june.pdf
+
+$ bean-extract payslip_config.py payslips/
+;; -*- mode: beancount -*-
+**** payslips/june.pdf
+
+2017-07-31 * "Google" "Salary"
+  Expenses:Tax:Income               123.45 GBP
+  Expenses:Tax:NationalInsurance    789.10 GBP
+  Assets:NatWest:Savings           1122.33 GBP
+  Income:Google:Salary    
 ```
 
 ## Developing
@@ -54,7 +87,7 @@ using [pip][pip]:
 ```
 $ python3 -m venv venv
 $ source venv/bin/activate
-(venv)$ pip3 install -r requirements_frozen.txt
+(venv)$ pip3 install -r requirements_dev.txt
 ```
 
 ## Testing
@@ -66,7 +99,7 @@ $ source venv/bin/activate
 Run the following command to perform the static type analysis:
 
 ```
-(venv)$ mypy .
+(venv)$ mypy --ignore-missing-imports .
 ```
 
 ### Unit Tests
@@ -90,10 +123,10 @@ Bug reports and pull requests are welcome on [GitHub][github].
 This project is available under the terms of the ISC license. See the
 [`LICENSE`](LICENSE) file for the copyright information and licensing terms.
 
-[python]: https://www.python.org/
 [beancount]: http://furius.ca/beancount/
+[python]: https://www.python.org/
 [virtualenv]: https://virtualenv.pypa.io/en/stable/
 [pip]: https://pypi.python.org/pypi/pip
 [mpypy]: http://mypy-lang.org/
 [pytest]: https://docs.pytest.org/en/latest/index.html
-[github]: https://github.com/michaelbull/beancount-parsers
+[github]: https://github.com/michaelbull/beancount-importers
