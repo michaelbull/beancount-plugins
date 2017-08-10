@@ -8,7 +8,9 @@ A collection of my custom [beancount][beancount] importers, written in [Python 3
 
 Import historic commodity price information from the London Stock Exchange.
 
-`lse_config.py`:
+### Usage
+
+Add the following to `lse_config.py`:
 
 ```python
 from src.importers.lse import LondonStockExchangeImporter
@@ -18,11 +20,16 @@ CONFIG = [
 ]
 ```
 
-**Output:**
+Ensure you have a `.price` file in the `prices` directory:
+
 ```
 $ cat prices/FTSE100.price
 UKX.FTD
+```
 
+Run `bean-extract` to extract the prices:
+
+```
 $ bean-extract lse_config.py prices/
 ;; -*- mode: beancount -*-
 **** prices/FTSE100.price
@@ -33,19 +40,16 @@ $ bean-extract lse_config.py prices/
 
 2012-08-15 price FTSE100                            58.330 GBP
 
-2012-08-16 price FTSE100                            58.345 GBP
-
-2012-08-17 price FTSE100                            58.524 GBP
-
 ...
-
 ```
 
 ## PayslipImporter
 
 Import a PDF payslip.
 
-`payslip_config.py`:
+### Usage
+
+Add the following to `payslip_config.py`:
 
 ```python
 from src.importers.payslip import PayslipImporter
@@ -55,13 +59,17 @@ CONFIG = [
 ]
 ```
 
-**Output:**
+Ensure you have a payslip `.pdf` file in the `payslips` directory:
 
 ```
 $ tree payslips/
 payslips/
 └── june.pdf
+```
 
+Run `bean-extract` to extract the transaction:
+
+```
 $ bean-extract payslip_config.py payslips/
 ;; -*- mode: beancount -*-
 **** payslips/june.pdf
