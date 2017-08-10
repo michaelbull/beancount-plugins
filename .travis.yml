@@ -8,4 +8,4 @@ install: pip install -r requirements_dev.txt
 
 script:
   - mypy --ignore-missing-imports .
-  - pytest
+#  - pytest
