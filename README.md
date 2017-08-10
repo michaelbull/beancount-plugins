@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/michaelbull/beancount-importers.svg?branch=master)](https://travis-ci.org/michaelbull/beancount-importers)
 
-A collection of my custom [beancount][beancount] importers, written in [Python 3.6+][python].
+A collection of my custom [beancount][beancount] importers, written in [Python][python] (3.6).
 
 ## LondonStockExchangeImporter
 
