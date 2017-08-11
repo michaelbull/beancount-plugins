@@ -5,7 +5,7 @@ from os import path
 from beancount.core import amount, data
 from beancount.core.number import D
 
-from src.util.lse import get_prices
+from importers.util.lse import get_prices
 
 
 class LondonStockExchangeImporter:

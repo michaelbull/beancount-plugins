@@ -13,7 +13,7 @@ Import historic commodity price information from the London Stock Exchange.
 Add the following to `lse_config.py`:
 
 ```python
-from src.importers.lse import LondonStockExchangeImporter
+from importers.lse import LondonStockExchangeImporter
 
 CONFIG = [
     LondonStockExchangeImporter('GBP')
@@ -52,7 +52,7 @@ Import a PDF payslip.
 Add the following to `payslip_config.py`:
 
 ```python
-from src.importers.payslip import PayslipImporter
+from importers.payslip import PayslipImporter
 
 CONFIG = [
     PayslipImporter('Google', 'NatWest:Savings', 'GBP', student_loan=False)

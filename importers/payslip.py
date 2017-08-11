@@ -5,7 +5,7 @@ from decimal import Decimal
 from beancount.core import amount, data, flags
 from beancount.core.number import D
 
-from src.util.pdftotext import pdftotext
+from importers.util import pdftotext
 
 
 def find_date(payslip):
