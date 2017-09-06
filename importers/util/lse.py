@@ -1,11 +1,8 @@
-import json
-from urllib import request
+from .rest import post
 
 
 def get_prices(key: str) -> dict:
-    url = 'http://charts.londonstockexchange.com/WebCharts/services/ChartWService.asmx/GetPrices'
-
-    data = {
+    return post('http://charts.londonstockexchange.com/WebCharts/services/ChartWService.asmx/GetPrices', {
         'request': {
             'SampleTime': '1d',
             'TimeFrame': '5y',
@@ -20,12 +17,4 @@ def get_prices(key: str) -> dict:
             'KeyType2': 'Topic',
             'Language': 'en'
         }
-    }
-
-    headers = {
-        'Content-Type': 'application/json'
-    }
-
-    req = request.Request(url, data=json.dumps(data).encode('utf-8'), headers=headers)
-    resp = request.urlopen(req)
-    return json.loads(resp.read().decode())
+    })
