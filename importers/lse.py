@@ -1,11 +1,13 @@
 import datetime
 import re
 from os import path
+from typing import List
 
 from beancount.core import amount, data
+from beancount.core.data import Price
 from beancount.core.number import D
 
-from importers.util.lse import get_prices
+from .util import get_prices
 
 
 class LondonStockExchangeImporter:
@@ -14,7 +16,7 @@ class LondonStockExchangeImporter:
     def __init__(self, currency: str) -> None:
         self.currency = currency
 
-    def name(self):
+    def name(self) -> str:
         """Return a unique id/name for this importer.
 
         Returns:
@@ -24,7 +26,7 @@ class LondonStockExchangeImporter:
 
     __str__ = name
 
-    def identify(self, file):
+    def identify(self, file) -> bool:
         """Return true if this importer matches the given file.
 
         Args:
@@ -34,7 +36,7 @@ class LondonStockExchangeImporter:
         """
         return path.basename(file.name).endswith('.price')
 
-    def extract(self, file):
+    def extract(self, file) -> List[Price]:
         """Extract transactions from a file.
 
         Args:

@@ -1,14 +1,16 @@
 import datetime
 import re
-from decimal import Decimal
+from typing import List
 
 from beancount.core import amount, data, flags
+from beancount.core.amount import Amount
+from beancount.core.data import Transaction
 from beancount.core.number import D
 
-from importers.util import pdftotext
+from .util import pdftotext
 
 
-def find_date(payslip):
+def find_date(payslip) -> datetime.date:
     date_pattern = re.compile('\d+/\d+/\d+')
     return datetime.datetime.strptime(re.search(date_pattern, payslip).group(0), '%d/%m/%Y').date()
 
@@ -22,7 +24,7 @@ class PayslipImporter:
         self.currency = currency
         self.student_loan = student_loan
 
-    def name(self):
+    def name(self) -> str:
         """Return a unique id/name for this importer.
 
         Returns:
@@ -32,7 +34,7 @@ class PayslipImporter:
 
     __str__ = name
 
-    def identify(self, file):
+    def identify(self, file) -> bool:
         """Return true if this importer matches the given file.
 
         Args:
@@ -46,7 +48,7 @@ class PayslipImporter:
         payslip = file.convert(pdftotext)
         return True if payslip and 'Total Gross Pay' in payslip else False
 
-    def extract(self, file):
+    def extract(self, file) -> List[Transaction]:
         """Extract transactions from a file.
 
         Args:
@@ -80,7 +82,7 @@ class PayslipImporter:
                                postings)
         return [txn]
 
-    def file_account(self, file):
+    def file_account(self, file) -> str:
         """Return an account associated with the given file.
 
         Note: If you don't implement this method you won't be able to move the
@@ -96,7 +98,7 @@ class PayslipImporter:
         """
         return f'Income:{self.employer}:Salary'
 
-    def file_name(self, file):
+    def file_name(self, file) -> str:
         """A filter that optionally renames a file before filing.
 
         This is used to make tidy filenames for filed/stored document files. The
@@ -110,7 +112,7 @@ class PayslipImporter:
         """
         return 'payslip.pdf'
 
-    def file_date(self, file):
+    def file_date(self, file) -> datetime.date:
         """Attempt to obtain a date that corresponds to the given file.
 
         Args:
@@ -123,6 +125,6 @@ class PayslipImporter:
         payslip = file.convert(pdftotext)
         return find_date(payslip)
 
-    def find_amount(self, qualifier: str, payslip: str) -> Decimal:
+    def find_amount(self, qualifier: str, payslip: str) -> Amount:
         pattern = re.compile(qualifier + '[ ]+(?P<amount>-?\d*\.?\d+)')
         return amount.Amount(D(re.search(pattern, payslip).group('amount')), self.currency)
