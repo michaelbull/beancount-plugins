@@ -6,6 +6,7 @@ from beancount.core import amount, data, flags
 from beancount.core.amount import Amount
 from beancount.core.data import Transaction
 from beancount.core.number import D
+from beancount.ingest.importer import ImporterProtocol
 
 from .util import pdftotext
 
@@ -15,7 +16,7 @@ def find_date(payslip) -> datetime.date:
     return datetime.datetime.strptime(re.search(date_pattern, payslip).group(0), '%d/%m/%Y').date()
 
 
-class PayslipImporter:
+class PayslipImporter(ImporterProtocol):
     """Importer for payslips."""
 
     def __init__(self, employer: str, asset: str, currency: str, student_loan: bool) -> None:
@@ -25,23 +26,11 @@ class PayslipImporter:
         self.student_loan = student_loan
 
     def name(self) -> str:
-        """Return a unique id/name for this importer.
-
-        Returns:
-          A string which uniquely identifies this importer.
-        """
         return self.__class__.__name__
 
     __str__ = name
 
     def identify(self, file) -> bool:
-        """Return true if this importer matches the given file.
-
-        Args:
-          file: A cache.FileMemo instance.
-        Returns:
-          A boolean, true if this importer can handle this file.
-        """
         if file.mimetype() != 'application/pdf':
             return False
 
@@ -49,14 +38,6 @@ class PayslipImporter:
         return True if payslip and 'Total Gross Pay' in payslip else False
 
     def extract(self, file) -> List[Transaction]:
-        """Extract transactions from a file.
-
-        Args:
-          file: A cache.FileMemo instance.
-        Returns:
-          A list of new, imported directives (usually mostly Transactions)
-          extracted from the file.
-        """
         payslip = file.convert(pdftotext)
         date = find_date(payslip)
 
@@ -83,45 +64,12 @@ class PayslipImporter:
         return [txn]
 
     def file_account(self, file) -> str:
-        """Return an account associated with the given file.
-
-        Note: If you don't implement this method you won't be able to move the
-        files into its preservation hierarchy; the bean-file command won't work.
-
-        Also, normally the returned account is not a function of the input
-        file--just of the importer--but it is provided anyhow.
-
-        Args:
-          file: A cache.FileMemo instance.
-        Returns:
-          The name of the account that corresponds to this importer.
-        """
         return f'Income:{self.employer}:Salary'
 
     def file_name(self, file) -> str:
-        """A filter that optionally renames a file before filing.
-
-        This is used to make tidy filenames for filed/stored document files. The
-        default implementation just returns the same filename. Note that a
-        simple RELATIVE filename must be returned, not an absolute filename.
-
-        Args:
-          file: A cache.FileMemo instance.
-        Returns:
-          The tidied up, new filename to store it as.
-        """
         return 'payslip.pdf'
 
     def file_date(self, file) -> datetime.date:
-        """Attempt to obtain a date that corresponds to the given file.
-
-        Args:
-          file: A cache.FileMemo instance.
-        Returns:
-          A date object, if successful, or None if a date could not be extracted.
-          (If no date is returned, the file creation time is used. This is the
-          default.)
-        """
         payslip = file.convert(pdftotext)
         return find_date(payslip)
 
