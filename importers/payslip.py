@@ -13,7 +13,12 @@ from .util import pdftotext
 
 def find_date(payslip) -> datetime.date:
     date_pattern = re.compile(r'\d+/\d+/\d+')
-    return datetime.datetime.strptime(re.search(date_pattern, payslip).group(0), '%d/%m/%Y').date()
+    match = re.search(date_pattern, payslip)
+
+    if match is None:
+        raise Exception(f'No date match in {payslip}')
+    else:
+        return datetime.datetime.strptime(match.group(0), '%d/%m/%Y').date()
 
 
 class PayslipImporter(ImporterProtocol):
@@ -85,4 +90,9 @@ class PayslipImporter(ImporterProtocol):
 
     def find_amount(self, qualifier: str, payslip: str) -> Amount:
         pattern = re.compile(qualifier + r'[ ]+(?P<amount>-?\d*\.?\d+)')
-        return amount.Amount(D(re.search(pattern, payslip).group('amount')), self.currency)
+        match = re.search(pattern, payslip)
+
+        if match is None:
+            raise Exception(f'No amount in {payslip}')
+        else:
+            return amount.Amount(D(match.group('amount')), self.currency)
