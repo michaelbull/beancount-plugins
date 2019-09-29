@@ -1,2 +1,2 @@
-from .lse import LondonStockExchangeImporter
+from .ft import FinancialTimesImporter
 from .payslip import PayslipImporter
