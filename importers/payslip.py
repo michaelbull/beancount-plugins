@@ -12,7 +12,7 @@ from .util import pdftotext
 
 
 def find_date(payslip) -> datetime.date:
-    date_pattern = re.compile('\d+/\d+/\d+')
+    date_pattern = re.compile(r'\d+/\d+/\d+')
     return datetime.datetime.strptime(re.search(date_pattern, payslip).group(0), '%d/%m/%Y').date()
 
 
@@ -37,7 +37,7 @@ class PayslipImporter(ImporterProtocol):
         payslip = file.convert(pdftotext)
         return True if payslip and 'Total Gross Pay' in payslip else False
 
-    def extract(self, file) -> List[Transaction]:
+    def extract(self, file, existing_entries=None) -> List[Transaction]:
         payslip = file.convert(pdftotext)
         date = find_date(payslip)
 
@@ -59,8 +59,18 @@ class PayslipImporter(ImporterProtocol):
         postings.append(data.Posting(f'Income:{self.employer}:Salary', None, None, None, None, None))
 
         meta = data.new_metadata(file.name, int(1))
-        txn = data.Transaction(meta, date, flags.FLAG_OKAY, self.employer, 'Salary', data.EMPTY_SET, data.EMPTY_SET,
-                               postings)
+
+        txn = data.Transaction(
+            meta,
+            date,
+            flags.FLAG_OKAY,
+            self.employer,
+            'Salary',
+            data.EMPTY_SET,
+            data.EMPTY_SET,
+            postings
+        )
+
         return [txn]
 
     def file_account(self, file) -> str:
@@ -74,5 +84,5 @@ class PayslipImporter(ImporterProtocol):
         return find_date(payslip)
 
     def find_amount(self, qualifier: str, payslip: str) -> Amount:
-        pattern = re.compile(qualifier + '[ ]+(?P<amount>-?\d*\.?\d+)')
+        pattern = re.compile(qualifier + r'[ ]+(?P<amount>-?\d*\.?\d+)')
         return amount.Amount(D(re.search(pattern, payslip).group('amount')), self.currency)

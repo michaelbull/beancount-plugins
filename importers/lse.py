@@ -25,9 +25,9 @@ class LondonStockExchangeImporter(ImporterProtocol):
     def identify(self, file) -> bool:
         return path.basename(file.name).endswith('.price')
 
-    def extract(self, file) -> List[Price]:
+    def extract(self, file, existing_entries=None) -> List[Price]:
         key = open(file.name).readline().splitlines()[0]
-        commodity = re.sub('\.price$', '', path.basename(file.name))
+        commodity = re.sub(r'\.price$', '', path.basename(file.name))
 
         prices = []
         entry = 1
