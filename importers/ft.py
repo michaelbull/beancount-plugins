@@ -1,6 +1,6 @@
 import csv
 import re
-from datetime import datetime
+from datetime import date, datetime
 from os import path
 from typing import List, Optional
 
@@ -12,11 +12,11 @@ from beancount.ingest.importer import ImporterProtocol
 from importers.util import get_prices
 
 
-def parse_iso8601(date: str) -> datetime:
-    return datetime.strptime(date, '%Y-%m-%dT%H:%M:%S')
+def parse_iso8601(iso8601: str) -> date:
+    return datetime.strptime(iso8601, '%Y-%m-%dT%H:%M:%S').date()
 
 
-def parse_dates(dates: List[str]) -> List[datetime]:
+def parse_dates(dates: List[str]) -> List[date]:
     return list(map(parse_iso8601, dates))
 
 
