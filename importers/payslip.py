@@ -22,7 +22,7 @@ def find_date(payslip: str) -> datetime.date:
         return datetime.datetime.strptime(match.group(0), '%d/%m/%Y').date()
 
 
-class PayslipImporter(ImporterProtocol):
+class Importer(ImporterProtocol):
     """Importer for payslips."""
 
     def __init__(self, employer: str, asset: str, currency: str, student_loan: bool) -> None:

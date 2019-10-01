@@ -13,10 +13,10 @@ Import historic commodity price information from the [Financial Times Funds][ft-
 Add the following to `ft_config.py`:
 
 ```python
-from importers.ft import FinancialTimesImporter
+from importers import ft
 
 CONFIG = [
-    FinancialTimesImporter('GBP')
+    ft.Importer('GBP')
 ]
 ```
 
@@ -62,10 +62,10 @@ Import a PDF payslip.
 Add the following to `payslip_config.py`:
 
 ```python
-from importers.payslip import PayslipImporter
+from importers import payslip
 
 CONFIG = [
-    PayslipImporter('Google', 'NatWest:Savings', 'GBP', student_loan=False)
+    payslip.Importer('Google', 'NatWest:Savings', 'GBP', student_loan=False)
 ]
 ```
 
@@ -100,6 +100,7 @@ using [pip][pip]:
 $ python3 -m venv venv
 $ source venv/bin/activate
 (venv)$ pip3 install -r requirements_dev.txt
+(venv)$ PYTHONPATH=. bean-extract ft_config.py prices/
 ```
 
 ## Testing

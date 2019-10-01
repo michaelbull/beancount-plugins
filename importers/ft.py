@@ -53,7 +53,7 @@ def get_prices(label: str, symbol: str) -> dict:
     })
 
 
-class FinancialTimesImporter(ImporterProtocol):
+class Importer(ImporterProtocol):
     """Importer for Financial Times market data."""
 
     def __init__(self, currency: str) -> None:
