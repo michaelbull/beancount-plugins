@@ -1,59 +1,10 @@
-# beancount-importers
+# beancount-plugins
 
-[![Build Status](https://travis-ci.org/michaelbull/beancount-importers.svg?branch=master)](https://travis-ci.org/michaelbull/beancount-importers)
+[![Build Status](https://travis-ci.org/michaelbull/beancount-plugins.svg?branch=master)](https://travis-ci.org/michaelbull/beancount-plugins)
 
-A collection of my custom [beancount][beancount] importers, written in [Python][python] (3.7).
+A collection of my custom [beancount][beancount] importers & price sources, written in [Python][python] (3.7).
 
-## FinancialTimesImporter
-
-Import historic commodity price information from the [Financial Times Funds][ft-funds].
-
-### Usage
-
-Add the following to `ft_config.py`:
-
-```python
-from importers import ft
-
-CONFIG = [
-    ft.Importer('GBP')
-]
-```
-
-Ensure you have a `.price` file in the `prices` directory, structured as a CSV
-file with the fund's label and symbol. For example, the 
-[`LU0011847091`](https://markets.ft.com/data/funds/tearsheet/summary?s=LU0011847091:GBP)
-fund has the following label and symbol:
-
-```
-$ cat prices/LU0011847091.price
-Label,Symbol
-d9828b00,791
-```
-
-Run `bean-extract` to extract the prices:
-
-```
-$ bean-extract ft_config.py prices/
-;; -*- mode: beancount -*-
-**** prices/LU0011847091.price
-
-2009-10-01 00:00:00 price LU0011847091                       51.470 GBP
-
-2009-11-02 00:00:00 price LU0011847091                       52.810 GBP
-
-2009-12-01 00:00:00 price LU0011847091                       54.650 GBP
-
-2010-01-04 00:00:00 price LU0011847091                       53.230 GBP
-
-2010-02-01 00:00:00 price LU0011847091                       54.790 GBP
-
-2010-03-01 00:00:00 price LU0011847091                       58.900 GBP
-
-...
-```
-
-## PayslipImporter
+## payslip.Importer
 
 Import a PDF payslip.
 
@@ -143,4 +94,4 @@ This project is available under the terms of the ISC license. See the
 [pip]: https://pypi.python.org/pypi/pip
 [mpypy]: http://mypy-lang.org/
 [pytest]: https://docs.pytest.org/en/latest/index.html
-[github]: https://github.com/michaelbull/beancount-importers
+[github]: https://github.com/michaelbull/beancount-plugins
