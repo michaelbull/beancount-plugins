@@ -1,2 +1,2 @@
-from .ft import get_prices
 from .pdftotext import pdftotext
+from .rest import get, post

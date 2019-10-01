@@ -9,9 +9,11 @@ def pdftotext(filename: str) -> str:
     Returns:
       A string, the text contents of the filename.
     """
+
     executable = ['pdftotext', '-layout', filename, '-']
     pipe = Popen(executable, stdout=PIPE, stderr=PIPE)
     stdout, stderr = pipe.communicate()
+
     if stderr:
         raise ValueError(stderr.decode('utf-8'))
     else:
