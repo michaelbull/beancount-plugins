@@ -78,7 +78,7 @@ class Importer(ImporterProtocol):
         )
 
         salary = Posting(
-            account=f'Income:{self.employer}:Salary',
+            account=f'Income:Salary:{self.employer}',
             units=None,
             cost=None,
             price=None,
@@ -108,7 +108,7 @@ class Importer(ImporterProtocol):
         return [txn]
 
     def file_account(self, file: _FileMemo) -> str:
-        return f'Income:{self.employer}:Salary'
+        return f'Income:Salary:{self.employer}'
 
     def file_name(self, file: _FileMemo) -> str:
         return 'payslip.pdf'

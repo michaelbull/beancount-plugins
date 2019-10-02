@@ -16,7 +16,7 @@ Add the following to `payslip_config.py`:
 from importers import payslip
 
 CONFIG = [
-    payslip.Importer('Google', 'NatWest:Savings', 'GBP', student_loan=False)
+    payslip.Importer('Google', 'Savings:NatWest', 'GBP', student_loan=False)
 ]
 ```
 
@@ -38,8 +38,8 @@ $ bean-extract payslip_config.py payslips/
 2017-07-31 * "Google" "Salary"
   Expenses:Tax:Income               123.45 GBP
   Expenses:Tax:NationalInsurance    789.10 GBP
-  Assets:NatWest:Savings           1122.33 GBP
-  Income:Google:Salary    
+  Assets:Savings:NatWest           1122.33 GBP
+  Income:Salary:Google    
 ```
 
 ## Developing
