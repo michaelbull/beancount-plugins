@@ -54,9 +54,7 @@ $ source venv/bin/activate
 (venv)$ PYTHONPATH=. bean-extract ft_config.py prices/
 ```
 
-## Testing
-
-### Type Checker
+## Type Checking
 
 [Mypy](mypy) is installed to run static type checking on the source files.
 
@@ -64,18 +62,6 @@ Run the following command to perform the static type analysis:
 
 ```
 (venv)$ mypy --ignore-missing-imports .
-```
-
-### Unit Tests
-
-Unit tests are written using [`pytest`][pytest].
-
-Run the following command to execute the unit tests:
-
-```
-(venv)$ pytest -q
-........
-8 passed in 0.04 seconds
 ```
 
 ## Contributing
