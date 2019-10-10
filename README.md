@@ -44,8 +44,8 @@ $ bean-extract payslip_config.py payslips/
 
 ## Developing
 
-Create and activate a [`virtualenv`][virtualenv], then install the dependencies
-using [pip][pip]:
+Create and activate a [`venv`][venv], then install the dependencies using
+[pip][pip]:
 
 ```
 $ python3 -m venv venv
@@ -76,7 +76,7 @@ This project is available under the terms of the ISC license. See the
 [beancount]: http://furius.ca/beancount/
 [python]: https://www.python.org/
 [ft-funds]: https://markets.ft.com/data/funds/uk
-[virtualenv]: https://virtualenv.pypa.io/en/stable/
+[venv]: https://docs.python.org/3/library/venv.html
 [pip]: https://pypi.python.org/pypi/pip
 [mpypy]: http://mypy-lang.org/
 [pytest]: https://docs.pytest.org/en/latest/index.html
