@@ -1,6 +1,6 @@
 # beancount-plugins
 
-[![Build Status](https://travis-ci.org/michaelbull/beancount-plugins.svg?branch=master)](https://travis-ci.org/michaelbull/beancount-plugins)
+[![CI Status](https://github.com/michaelbull/beancount-plugins/workflows/ci/badge.svg)](https://github.com/michaelbull/beancount-plugins/actions?query=workflow%3Aci)
 
 A collection of my custom [beancount][beancount] importers & price sources, written in [Python][python] (3.7).
 
@@ -39,7 +39,7 @@ $ bean-extract payslip_config.py payslips/
   Expenses:Tax:Income               123.45 GBP
   Expenses:Tax:NationalInsurance    789.10 GBP
   Assets:Savings:NatWest           1122.33 GBP
-  Income:Salary:Google    
+  Income:Salary:Google
 ```
 
 ## Developing

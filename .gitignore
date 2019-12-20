@@ -7,11 +7,11 @@
 # Git
 !.git*
 
+# GitHub
+!/.github
+
 # EditorConfig
 !.editorconfig
-
-# Travis CI
-!.travis.yml
 
 # Python
 __pycache__/
