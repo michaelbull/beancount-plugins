@@ -15,7 +15,7 @@ jobs:
 
       - uses: actions/cache@v1
         with:
-          path: ~/.local/lib/python${{ matrix.python-version }}/site-packages
+          path: /lib/python${{ matrix.python-version }}/site-packages
           key: ${{ runner.os }}-python${{ matrix.python-version }}-site-packages-${{ hashFiles('requirements_dev.txt') }}
           restore-keys: |
             ${{ runner.os }}-python${{ matrix.python-version }}-site-packages-
@@ -24,6 +24,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - run: pip install --user -r requirements_dev.txt
+      - run: pip install -r requirements_dev.txt
 
       - run: mypy --ignore-missing-imports .
